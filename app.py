@@ -5,7 +5,7 @@ from fpdf import FPDF
 import os
 from dotenv import load_dotenv
 
-<<<<<<< HEAD
+
 # --- 1. Configuration & Security ---
 # Load variables from .env (for local development)
 load_dotenv()
@@ -26,7 +26,7 @@ if not api_key:
 
 # Configure Gemini (Stable version)
 genai.configure(api_key=api_key)
->>>>>>> 5ddca60 (Security: Integrated .env for API safety and updated to stable Gemini model)
+
 
 # Safe check for API Key to prevent StreamlitSecretNotFoundError
 api_key = os.getenv("GOOGLE_API_KEY")
