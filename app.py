@@ -2,12 +2,50 @@ import streamlit as st
 import google.generativeai as genai
 import random
 from fpdf import FPDF
+import os
+from dotenv import load_dotenv
 
-# --- 1. Configuration of the Gemini 1.5 Flash API ---
-api_key = st.secrets["GOOGLE_API_KEY"]
+<<<<<<< HEAD
+# --- 1. Configuration & Security ---
+# Load variables from .env (for local development)
+load_dotenv()
+
+# Safe check for API Key (Checks local .env first, then Streamlit Secrets)
+api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    try:
+        # This allows the app to work on Streamlit Cloud after deployment
+        api_key = st.secrets["GOOGLE_API_KEY"]
+    except Exception:
+        api_key = None
+
+if not api_key:
+    st.error("⚠️ API Key not found. Please ensure it's in your .env file locally or Streamlit Secrets on Cloud.")
+    st.stop()
+
+# Configure Gemini (Stable version)
+genai.configure(api_key=api_key)
+>>>>>>> 5ddca60 (Security: Integrated .env for API safety and updated to stable Gemini model)
+
+# Safe check for API Key to prevent StreamlitSecretNotFoundError
+api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    try:
+        # This will only run if st.secrets exists (like on Streamlit Cloud)
+        api_key = st.secrets["GOOGLE_API_KEY"]
+    except Exception:
+        api_key = None
+
+if not api_key:
+    st.error("⚠️ API Key not found. Please ensure it's in your .env file locally or Streamlit Secrets on Cloud.")
+    st.stop()
+
+# Configure Gemini 2.5 Flash
 genai.configure(api_key=api_key)
 
-# Define model settings - FIXED: Removed the '#' character
+# Define model settings
 generation_config = {
     "temperature": 0.75,
     "top_p": 0.95,
@@ -68,7 +106,7 @@ if st.button("Generate recepie"):
                         st.copy_to_clipboard(recipe_text)
                         st.success("Recipe text copied to clipboard!")
                     except AttributeError:
-                        # Professional fallback to ensure no crashes
+                        # Fallback for environment/path issues
                         st.info("📋 Click the icon in the box below to copy:")
                         st.code(recipe_text, language="markdown")
 
@@ -76,6 +114,7 @@ if st.button("Generate recepie"):
                     pdf = FPDF()
                     pdf.add_page()
                     pdf.set_font("Arial", size=12)
+                    # Clean text for PDF compatibility
                     clean_text = recipe_text.encode('latin-1', 'ignore').decode('latin-1')
                     pdf.multi_cell(0, 10, clean_text)
                     pdf_data = pdf.output(dest='S').encode('latin-1')
