@@ -18,5 +18,4 @@ Flavour Fusion is a web application built with **Streamlit** that leverages **Go
 
 1. **Clone the repository**:
    ```bash
-   git clone [https://github.com/PrernaJha07/Flavour-Fusion-AI-Driven-Recipe-Blogging.git]
-   cd Flavour_Fusion
+   https://github.com/238x5a1206-cell/Flavour-Fusion-AI-Driven-Recipe-Blogging
